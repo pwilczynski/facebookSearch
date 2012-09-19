@@ -1,0 +1,226 @@
+<div id="nav_bar">
+    <a href="/">Home</a> | <a href="/about">About</a>
+     <% if @current_user  %>
+        <span style='float:right; margin-right:30px'><a href="/logout" class="thin">Logout</a></span>
+     <% else %>
+        <div class="social_links" style="float:right">
+             <div>
+                 <a href="http://www.whatsherface-book.com" class="twitter-share-button" data-url="www.whatsherface-book.com" data-text="WhatsHerFace-book.com - Do you even know all your FB friends anymore!?! Methinks its time to do a little unfriendin'... #FB" data-count="horizontal" data-related="baygross:charliecroom" data-via="baygross">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+             </div>
+             <div>
+                 <iframe src="//www.facebook.com/plugins/like.php?href=http://www.facebook.com/pages/WhatsHerFacebook/195383003882500&amp;send=false&amp;layout=button_count&amp;width=62&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=lucida+grande&amp;height=71" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+             </div>
+        </div>
+     <% end %>
+</div>
+
+<div id="full_results">
+    
+    <div id="photo_pile">
+        <img src="/photorow/0.png" />
+        <img src="/photorow/12.png" />
+        <img src="/photorow/15.png" />
+        <img src="/photorow/19.png" />
+        <img src="/photorow/3.png" />
+        <img src="/photorow/6.png" />
+        <img src="/photorow/5.png" />
+        <img src="/photorow/blank.png" />
+    </div>
+    
+    <!-- individual stats -->
+    <% if @indivFlag %>
+        <% if params[:ts] %> 
+            <h1 id="this_time_score" class="top-title">You scored 
+                <span class="score"><%= to_pct_with_places(@my_score,1) %></span>
+                <a href="/" class="button round green arrow snice">Play Again</a>
+            </h1> 
+        <% end %>
+        <% if @my_score != @my_agg_score || !params[:ts]%> 
+            <h1 class="top-title">Your overall score is 
+                <span class="score"><%= to_pct_with_places(@my_agg_score,1) %></span>
+            </h1>
+        <% end %>
+        
+        <!-- FB share button --> 
+        <div id="share_line">
+             <span class="giant_hand">☞</span>
+            <div id='share_on_facebook' class='facebook-button large'><span class='button-text'>Share my score!</span></div>
+        </div>
+        
+        <!-- [ pie chart]  -->
+        <%= render :partial => '/charts/pie', :locals => {
+                :id => 'indiv_pie', 
+                :known => @correct_attempts.count, 
+                :unknown => @incorrect_attempts.count, 
+                :ctitle => "You knew #{@correct_attempts.count} of #{@curr_attempts.count} friends presented." 
+        }%>
+        
+        <!-- Un-named Friends --> 
+        <h4>You could not name the following friends:</h4>
+        <div id="missed_friends">
+        <% @incorrect_attempts.each do |f| %>
+            <a href="http://facebook.com/<%= f.target_facebook_id %>/" target="_blank" class="friend_box">
+                <div class="image_crop">
+                    <img src="http://graph.facebook.com/<%= f.target_facebook_id %>/picture?type=large">
+                </div>
+                <%= f.actual_name %>
+            </a>
+        <% end %>
+        <div class="clearfix">&nbsp;</div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+        
+        <!-- Suggestive stats -->
+        <h4 class="section">Have you adjusted your default privacy settings?</h4> 
+        <p>
+            Remember, information you share with your friends is distributed to:
+            <strong><%= number_with_delimiter(@current_user.friend_count.to_s) %> people</strong>.
+        </p>   
+        <p>
+            Did you know that your friends can give up <em>your</em> personal 
+            information to 3rd party applications with a single click? <br />
+            Do you trust <strong>all <%= @current_user.friend_count > 100 ? (@current_user.friend_count / 100 ).to_s + "-hundred" : @current_user.friend_count  %></strong> 
+            of them to consistently make good decisions?
+        </p>
+        <p>
+            What's more: the information you share with 'friends of friends' 
+            is distributed to around:<strong> <%= number_with_delimiter(@fof_count.to_s) %> people</strong>.
+        </p>
+        <% if @my_affiliations %>
+        <p>
+            And you are in the following <strong>networks</strong>:
+            <% @my_affiliations.each do |a| %>
+                <br />&nbsp;&nbsp;&nbsp;&nbsp;<%= a[:name] + " - where you knew "+ to_pct_with_places(a[:accuracy].to_f ,1) + " of your friends presented" %>
+            <% end %>
+            <br />
+            But those networks are FAR larger than your immediate friend group.
+        </p>
+        <% end %>
+        <p>
+            Finally, recall that data shared publicly on Facebook goes out to:
+            <strong>800,000,000 people...</strong>  
+        </p>
+        <p>
+            But you're probably fine... <br />What's the <a href="http://www.takethislollipop.com/">worst</a> that could happen?
+        </p>
+        <br /><br />
+        <hr />
+    <% end %>
+    
+    
+    <!--  Aggregate Stats -->
+    <h1>The average Facebook user <br />knows <span class="score"><%= to_pct_with_places(@overall_correct_pct,1) %></span> of their friends.</h1>
+    <% if @indivFlag %>
+        <div id="player_count">
+            based on<br />
+            <span class="big_num"><%= User.count %></span> players<br />
+            naming<br />
+            <span class="big_num"><%= Attempt.count / 1000 %>,000+</span> friends<br />
+        </div>
+    <% else %>
+        <div id="player_count_small">
+            <span class="giant_hand">☞</span>
+            based on<span class="big_num"> <%= User.count %> </span>players naming<span class="big_num"> <%= Attempt.count / 1000 %>,000+ </span> friends
+        </div>
+    <% end %>
+    <!-- this is awful, gotta switch that helper out to a private controller action and run server-side -->
+    <%
+        @gender_age_hash = {
+            :ages => ['<18', '18-21', '21-23', '23-25', '25+'],
+            :male => [tally_data(@gender_age_breakdown.select{|d| (1..17).include? d["age"]},"male",false), tally_data(@gender_age_breakdown.select{|d| (18..20).include? d["age"]},"male",false), tally_data(@gender_age_breakdown.select{|d| (21..22).include? d["age"]},"male",false), tally_data(@gender_age_breakdown.select{|d| (23..24).include? d["age"]},"male",false), tally_data(@gender_age_breakdown.select{|d| (25..100).include? d["age"]},"male",false)],
+            :female => [tally_data(@gender_age_breakdown.select{|d| (1..17).include? d["age"]},"female",false), tally_data(@gender_age_breakdown.select{|d| (18..20).include? d["age"]},"female",false), tally_data(@gender_age_breakdown.select{|d| (21..22).include? d["age"]},"female",false), tally_data(@gender_age_breakdown.select{|d| (23..24).include? d["age"]},"female",false), tally_data(@gender_age_breakdown.select{|d| (25..100).include? d["age"]},"female",false)],
+            :total => [tally_data(@gender_age_breakdown.select{|d| (1..17).include? d["age"]},"all",false), tally_data(@gender_age_breakdown.select{|d| (18..20).include? d["age"]},"all",false), tally_data(@gender_age_breakdown.select{|d| (21..22).include? d["age"]},"all",false), tally_data(@gender_age_breakdown.select{|d| (23..24).include? d["age"]},"all",false), tally_data(@gender_age_breakdown.select{|d| (25..100).include? d["age"]},"all",false)]
+        }
+    %>
+    
+    <!-- [ pie chart]  -->
+    <%= render :partial => '/charts/bar', :locals => {
+            :id => 'agg_age', 
+            :ctitle => "Percent of friends known, by user age and gender",
+            :ytitle => "Percent known",
+            :xops => @gender_age_hash[:ages],
+            :yops => ['Men', 'Women'],
+            :tt_desc => " this.x + ' year-old ' + this.series.name.toLowerCase()  + ' knew ' + this.y + '% of their friends.' ",
+            :men_data =>  @gender_age_hash[:male],
+            :women_data => @gender_age_hash[:female]
+    }%>
+    <!-- and its table --> 
+    <table>
+    <tr><th>Age</th><th>Male</th><th>Female</th><th> Total </th></tr>
+    <% (0..4).each do |i| %>
+    	<tr>
+	    	<td class="title"><%= @gender_age_hash[:ages][i] %></td>
+	    	<td><%= to_pct_with_places(@gender_age_hash[:male][i], 2)  %></td>
+	    	<td><%= to_pct_with_places(@gender_age_hash[:female][i], 2)  %></td>
+	    	<td><%= to_pct_with_places(@gender_age_hash[:total][i], 2)  %></td>
+    	</tr>
+    <% end %>
+    <tr><td class='title'>Totals</td><td><%= tally_data(@gender_age_breakdown,"male") %></td><td><%= tally_data(@gender_age_breakdown,"female") %></td><td><%= tally_data(@gender_age_breakdown,"all") %></td></tr>
+    </table>
+    <div class="caption">Above: the percentage of 'friends known' is broken down by age and gender.</div>
+    <br />
+    
+    
+    <!-- [ pie chart]  -->
+    <%= render :partial => '/charts/bar', :locals => {
+            :id => 'agg_gender', 
+            :ctitle => "Are guys more likely to friend girls on a whim?",
+            :ytitle => "Percent known",
+            :xops => ['Men', 'Women'], 
+            :yops => ['Male Friends', 'Female Friends'],
+            :tt_desc => "this.x + ' knew ' + this.y + '% of their ' + this.series.name.toLowerCase() + '.' ",
+            :men_data => [tally_data(@gender_gender_breakdown.select{|r| r["user_gender"] == "male"},"male",false), tally_data(@gender_gender_breakdown.select{|r| r["user_gender"] == "female"},"male",false)],
+            :women_data => [tally_data(@gender_gender_breakdown.select{|r| r["user_gender"] == "male"},"female",false), tally_data(@gender_gender_breakdown.select{|r| r["user_gender"] == "female"},"female",false)]
+    }%>
+    <!-- and its table --> 
+    <table>
+      <tr><th></th><th>Male Friends</th><th>Female Friends</th><th>Total</th></tr>
+      
+      <% @gender_gender_breakdown.group_by{|d| d["user_gender"]}.each do |gender,data| %>
+    	<% next if(gender.nil?) %>
+    	<tr>
+			<td class='title'><%= gender.capitalize %> User</td>
+			<td><%= tally_data(data,"male") %></td>
+			<td><%= tally_data(data,"female") %></td>
+			<td><%= tally_data(data,"all") %></td>
+      	</tr>
+      <% end %>
+      </table>
+      <div class="caption">Above: the percentage of 'friends known' is graphed for gender-gender correlations.</div>
+      <br />
+    
+    <div class="clearfix">&nbsp;</div>
+    
+    <!-- Call to action -->
+    <h1>Okay, so what should I do? 
+        <% if !@indivFlag %>
+         <a href="/" class="button round green arrow snice bottom">Test yourself</a>
+        <% else %>
+         <a href="/" class="button round green arrow snice bottom">Play again</a>
+         <% end %>
+     </h1>
+    <ol id="next_steps">
+        <li>Get <a href="https://www.facebook.com/help/?faq=172936839431357#How-do-I-unfriend-or-delete-a-friend?">un-friendin'</a></li>
+        <li>
+            <a href="https://www.facebook.com/help/?faq=117646641653775#Why-aren’t-all-of-my-friends-visible-while-using-a-certain-app?">
+                Restrict</a> what (if any) of your personal information 
+                your friends can share with 3rd party apps.
+        </li>
+        <li>Create layered
+            <a href="https://www.facebook.com/help/?faq=190416214359937#How-do-I-create-and-edit-lists?">
+            friend lists</a> with different privacy settings to
+             more accurately represent and control your relationships.
+        </li>
+        <li class="social_links">
+            Spread the word!
+            <div>
+                <a href="http://WhatsHerFace-book.com" class="twitter-share-button" data-url="http://WhatsHerFace-book.com" data-text="WhatsHerFace-book.com - Do you even know all your FB friends anymore!?! Methinks its time to do a little unfriendin'... #FB" data-count="horizontal" data-related="baygross:charliecroom" data-via="baygross">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+            </div>
+            <div>
+                <iframe src="//www.facebook.com/plugins/like.php?href=http://www.facebook.com/pages/WhatsHerFacebook/195383003882500&amp;send=false&amp;layout=button_count&amp;width=62&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=lucida+grande&amp;height=71" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+            </div>
+        </li>
+    </ol>
+    
+    <div id="bottom_spacer">&nbsp;</div>
+</div>

@@ -1,0 +1,402 @@
+@import "common-vars";
+
+/*-----------------------------------------
+The Login Splash
+------------------------------------------*/
+#splash{
+    background-color:#fff;
+    padding:50px !important;
+    padding-bottom:20px !important;
+    h4{
+        margin-bottom:15px;
+    }
+    p{
+        font-size:15px;
+        line-height:1.43em;
+        color:#444;
+        strong{
+            font-weight:normal;
+            color:$blue;
+        }
+    }
+    #fb_connect{
+        width: 208px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 30px;
+    }
+    #privacy_info {
+        color: $sec_text;
+        font-size: 11px;
+        margin-top: 15px;
+        a{
+            color: $sec_text;
+            &:hover{
+                text-decoration:underline;
+            }
+        }
+    }
+}
+
+/*-----------------------------------------
+The Instructions Page
+------------------------------------------*/
+#instructions{
+    background-color:#fff;
+    p{
+        font-size:15px;
+        line-height:1.43em;
+        color:#444;
+        padding-top:15px;
+    }
+    #loading_wait{
+        float:right;
+        font-size:14px;
+        color:$blue;
+        img{width:12px; padding-right:2px;}
+        padding-right:6px;
+        padding-bottom:4px;
+    }
+}
+
+/*-----------------------------------------
+The Game Page
+------------------------------------------*/
+#game{
+    background-color:#fff;
+    position:relative;
+    padding-bottom:0px;
+
+    #timer{
+        position:absolute;
+        top:16px;
+        right:10px;
+        font-size:64px;
+        font-weight:bold;
+        color:$red;
+        text-shadow:0px -1px 0px #955;
+        padding:20px;
+    }
+
+    #left_block{
+        width:440px;
+        float:left;
+        img{
+            float:left;
+            padding:3px;
+            border:1px solid #eee;
+            margin:6px;
+            @include rounded_corners(3px);
+            &.small{
+                max-width:200px;
+            }
+        }
+        #unfair{
+            width:170px;
+            margin-right:200px;
+        }
+    }
+    #right_block{
+        padding-top:50px;
+        width:180px;
+        padding-left:20px;
+        float:left;
+
+        .helper{ margin-top:22px;}
+
+        input{
+            margin-top:4px;
+            padding:10px;
+            font-size:14px;
+            border:1px solid #ddd;
+            @include rounded_corners(5px);
+            width:100%;
+            &.invalid{
+                color: #B94A48;
+                border-color: #EE5F5B;
+                &:focus {
+                    outline:none;
+                    border-color: #e9322d;
+                    -webkit-box-shadow: 0 0 6px #f8b9b7;
+                    -moz-box-shadow: 0 0 6px #f8b9b7;
+                    box-shadow: 0 0 6px #f8b9b7;
+                }
+            }
+        }
+        #pause_block{
+          margin-top: 30px;
+          font-size: 12px;
+          padding-left: 46px;
+          text-align: right;
+          width: 158px;
+          display:none;
+          input{
+            display: inline;
+            width: 12px;
+            margin-right: 6px;
+          }
+        }
+        #answer{
+            color:#5AA732;
+            margin-top:2px;
+            padding-left:6px;
+            font-size:14px;
+            height:16px;
+        }
+        #idk{
+            margin-top:4px;  
+        }
+    }
+}
+
+#hover_img{
+	display: none;
+	padding: 15px;
+	@include rounded_corners(6px);
+	position: absolute;
+	
+	.tag_box {
+		border: 2px solid red;
+		position: absolute;
+	}
+}
+/*-----------------------------------------
+The Results Link Page
+------------------------------------------*/
+#results{
+    padding:160px 0px 0px 205px !important;
+    h4{
+        margin-bottom:10px;
+    }
+    #results_button{
+        margin-top:15px;
+        margin-left:180px;
+    }
+}
+/*-----------------------------------------
+The Actual Results Page
+------------------------------------------*/
+#full_results{
+    position:relative;
+    #photo_pile{
+        width:220px;
+        height:200px;
+        position:absolute;
+        top: -16px;
+        left: 689px;
+        img{
+            @include dropShadow(0px, 1px, 3px, rgba(0, 0, 0, .4) ) ;
+            position:absolute;
+            width:100px;
+            border:3px solid #fff;
+            @include rounded_corners(2px);
+            &:nth-child(1){
+                top:50px;
+                left:0px;
+                @include rotate(-30deg);
+                z-index:1;
+            }
+            &:nth-child(2){
+                top:0px;
+                left:0px;
+                @include rotate(-10deg);
+                z-index:2;
+            }
+            &:nth-child(3){
+                top:30px;
+                left:78px;
+                @include rotate(-10deg);
+                z-index:50;
+            }
+            &:nth-child(4){
+                top:10px;
+                left:22px;
+                @include rotate(20deg);
+                z-index:4;
+            }
+            &:nth-child(5){
+                top:15px;
+                left:94px;
+                @include rotate(15deg);
+                z-index:5;
+            }
+            &:nth-child(6){
+                top:70;
+                left:60px;
+                @include rotate(-20deg);
+                z-index:6;
+            }
+            &:nth-child(7){
+                top:75px;
+                left:55px;
+                @include rotate(45deg);
+                z-index:7;
+            }
+            &:nth-child(8){
+                top:50px;
+                left:50px;
+                @include rotate(-5deg);
+                z-index:100;
+            }
+        }
+    }
+    p{
+        font-size:14px;
+    }
+    .score{
+        color:$dark_blue;
+        font-weight:bold;
+        text-shadow:0px -1px 0px $grey;
+    } 
+    .friend_box{
+        display:block;
+        float:left;
+        padding:4px;
+        width:150px;
+        text-align:center;
+        border:1px solid #eee;
+        margin:6px;
+        @include rounded_corners(3px);
+        .image_crop{
+            height:80px;
+            width:100px;
+            text-align:center;
+            overflow:hidden;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        a{
+            font-size:14px;
+        }
+        &:hover{
+            background-color:#fff;
+            border:1px solid #ddd;
+        }
+    }
+    h1{
+        margin-top:80px;
+        margin-bottom:40px;
+        &.top-title:nth-child(3){
+            margin-top:0px;
+        }
+        .button{
+            top:-9px;
+            left:54px;
+            &.bottom{
+                left:292px;
+            }
+        }
+    }
+    #share_line{
+        margin-top:24px;
+        padding-left:26px;
+        .facebook-button{
+            display:inline-block;
+            font-size: 16px;
+            margin-left: 18px;
+        }
+        margin-bottom:60px
+    }
+    table{
+        float:left;
+        width:400px;
+        padding:15px;
+        margin-top:70px;
+        margin-bottom:8px;
+        margin-left:24px;
+         border:1px solid #eee;
+        th{
+            font-weight:bold;
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+        .title{font-weight:bold;}
+        td{
+            text-align:center;
+        }
+    }
+    .caption{
+        margin-left:50px;
+        width:350px;
+        text-align:center;
+        float:left;
+    }
+    .chart{
+        margin-top:30px;
+        float:left;
+        border:1px solid #eee;
+        width:320px;
+        &.large{
+            width:600px;
+        }
+    }
+    #chart_indiv_pie{
+        float: right;
+        height: 462px;
+        margin-bottom: 7px;
+        margin-right: 142px;
+        margin-top: 43px;
+        width: 322px;
+    }
+    h4{
+        margin-top:30px;
+        padding-left:22px;
+        padding-bottom:8px;
+    }
+    #missed_friends{
+        padding-left:22px;
+    }
+    p{
+        font-size:14px;
+        line-height:1.36em;
+        padding-left:22px;
+    }
+    #next_steps{
+        font-size:16px;
+    }
+    #bottom_spacer{
+        height:30px;
+    }
+    #player_count{
+      float: right;
+      margin-top: -139px;
+      padding-right: 25px;
+      font-size: 26px;
+      line-height:30px;
+      .big_num{
+        font-size:56px;
+        line-height:42px;
+        font-weight:bold;
+        text-shadow: 0px 1px 0px #333, 0px -1px 0px white;
+      }
+    }
+    #player_count_small{
+      margin-top: -24px;
+      .giant_hand{padding-right:4px;}
+      font-size: 15px;
+      .big_num{
+        font-size:24px;
+        line-height:24px;
+        font-weight:bold;
+        text-shadow: 0px 1px 0px #333, 0px -1px 0px white;
+      }
+    }
+}
+.social_links{
+    >div {
+        display:inline-block;
+        padding-left:8px;
+        iframe{
+            border:none; 
+            overflow:hidden; 
+            width:92px !important; 
+            height:24px !important; 
+            vertical-align: middle;
+        }
+    }
+
+}
+.giant_hand{
+    font-size:64px;
+    vertical-align:middle;
+}

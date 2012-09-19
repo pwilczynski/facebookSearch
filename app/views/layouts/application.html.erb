@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" xmlns:fb="http://www.facebook.com/2008/fbml"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8" />
+	
+	<title>What'sHerFace</title>
+	<!-- Set the viewport width to device width for mobile -->
+	<meta name="viewport" content="width=device-width" />
+	
+	<meta name="description" content="Race the clock to name your Facebook friends! Or do you even still know their names!?" />
+	<meta name="keywords" content="facebook, game, friend, unfriend, defriend, privacy, race, name, photos, sharing" />
+	<meta property="og:title" content="WhatsHerFace"/>
+	<meta property="og:type" content="website"/>
+	<meta property="og:url" content="http://www.whatsherface-book.com"/>
+	<meta property="og:image" content="http://whatsherface-book.com/images/fb_logo.png"/>
+	<meta property="og:description" content="Race the clock to name your Facebook friends as they appear! Or do you even still know their names!?"/> 
+	<meta property="og:locale" content="en_US"/>
+	<meta property="fb:admins" content="1343225522, 1252230433">
+	<link rel="icon" href="/images/favicon.png" type="image/ico" />
+	
+	<%= csrf_meta_tag %>
+	<%= stylesheet_link_tag 'application' %>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<%= javascript_include_tag 'application' %>
+	<%= javascript_include_tag @current_controller %>
+	<%= stylesheet_link_tag @current_controller %>
+	
+	<!--[if lt IE 9]>
+		<%= stylesheet_link_tag 'ie' %>
+	<![endif]-->
+	
+	<!-- IE Fix for HTML5 Tags -->
+	<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	
+	<%= yield :head %>
+
+</head>
+<body>
+
+	<div id="social_block" class="hide-on-phones">
+        <!-- filled with ajax call -->
+	</div>
+    
+    <% if !@fullPageFlag %>
+        <%= render :partial => 'shared/photo_row', :locals => { :animatePhotosFlag => @animatePhotosFlag } %>  
+        <div id="container">
+    	    <%= yield %>
+    	</div>
+    	<div id='hover_img'>
+			<img />
+			<div class="tag_box"></div>
+		</div>
+		<div id='press_box'>
+		    <div id="cpsc">
+		        A <a href="http://www.yalelawtech.org/">CPSC183</a> project, 2011
+		    </div>
+            <a href="http://www.allfacebook.com/that%E2%80%99s-a-facebook-photo-of-%E2%80%A6-what%E2%80%99sherface-2011-12" title="All Facebook">
+                <img id="allfacebook" src="/images/allfacebook.png" />
+            </a>
+            <a href="http://www.dailymail.co.uk/sciencetech/article-2074554/Facebook-timeline-feature-Mixed-reaction-latest-changes.html" title="Daily Mail">
+                <img id="dailymail" src="/images/dailymail.png" />
+            </a>
+            <a href="http://www.forbes.com/sites/kashmirhill/2011/12/15/as-facebook-timeline-rolls-out-find-out-how-well-you-know-your-friends/" title="Forbes">
+                <img id="forbes" src="/images/forbes.png" />
+            </a>
+        </div>
+    <% else %>
+        <div id="container_full">
+      	    <%= yield %>
+    	</div>  
+    <% end %>
+    
+	
+	<div id="footer">
+	    
+	</div>
+	
+	<!-- Page specific Javascript -->
+	<%= yield :bottom %>
+	
+	<!-- FB partial settings -->
+	<%= render :partial => 'shared/fbinit'%>
+	
+	<!-- Gaug.es -->
+    <script type="text/javascript">
+      var _gauges = _gauges || [];
+      (function() {
+        var t   = document.createElement('script');
+        t.type  = 'text/javascript';
+        t.async = true;
+        t.id    = 'gauges-tracker';
+        t.setAttribute('data-site-id', '4ee28db2613f5d2503000010');
+        t.src = '//secure.gaug.es/track.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(t, s);
+      })();
+    </script>
+    
+  <!-- Google Analytics -->
+
+</body>
+</html>
